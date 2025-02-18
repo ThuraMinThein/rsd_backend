@@ -1,0 +1,34 @@
+type Query {
+    users: [User]
+    userWithId(id: ID!): User
+    posts: [Post]
+    postWithId(id: ID!): Post
+    comments: [Comment]
+}
+
+type User {
+    id: ID!
+    name: String!
+    username: String!
+    bio: String
+    password: String!
+    posts: [Post!]!
+    comments: [Comment!]!
+    createdAt: String!
+}
+
+type Post {
+    id: ID!
+    content: String!
+    user: User!
+    comments: [Comment!]!
+    createdAt: String!
+}
+
+type Comment {
+    id: ID!
+    content: String!
+    user: User!
+    post: Post!
+    createdAt: String!
+}
