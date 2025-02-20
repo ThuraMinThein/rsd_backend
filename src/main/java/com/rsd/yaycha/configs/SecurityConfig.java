@@ -3,6 +3,7 @@ package com.rsd.yaycha.configs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -35,7 +36,7 @@ public class SecurityConfig {
         return http
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
-                    .requestMatchers("users/sign-up","users/login", "admins/seed", "graphiql")
+                    .requestMatchers(HttpMethod.POST, "users", "users/login", "admins/seed", "graphiql", "graphql")
                     .permitAll()
                     .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception
