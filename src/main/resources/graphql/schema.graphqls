@@ -9,7 +9,7 @@ type Query {
 type User {
     id: ID!
     name: String!
-    username: String!
+    userName: String!
     bio: String
     password: String!
     posts: [Post!]!

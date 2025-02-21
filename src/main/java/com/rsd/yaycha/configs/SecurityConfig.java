@@ -36,7 +36,7 @@ public class SecurityConfig {
         return http
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
-                    .requestMatchers(HttpMethod.POST, "users", "users/login", "admins/seed", "graphiql", "graphql")
+                    .requestMatchers(HttpMethod.POST, "users", "users/login", "graphiql", "graphql")
                     .permitAll()
                     .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception

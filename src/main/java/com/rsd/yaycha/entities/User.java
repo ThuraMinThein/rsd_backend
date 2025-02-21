@@ -27,6 +27,8 @@ public class User {
 
     private String password;
 
+    private String bio;
+
     @OneToMany(mappedBy = "user")
     private List<Post> posts;
 
