@@ -1,5 +1,5 @@
 type Query {
-    users: [User]
+    getUsers: [User]
     userWithId(id: ID!): User
     posts: [Post]
     postWithId(id: ID!): Post
@@ -12,9 +12,8 @@ type User {
     userName: String!
     bio: String
     password: String!
-    posts: [Post!]!
-    comments: [Comment!]!
-    createdAt: String!
+    posts: [Post]
+    comments: [Comment]
 }
 
 type Post {

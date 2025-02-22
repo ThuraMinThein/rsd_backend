@@ -1,5 +1,7 @@
 package com.rsd.yaycha.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -49,6 +51,15 @@ public class UserService {
         User user = userRepository.findByUserName(userDTO.getUserName());
         String accessToken = jwtService.generateToken(user.getUserName());
         return convertEntityToTokenDto(user, accessToken);
+    }
+
+    
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public User findOneById(int id) {
+        return userRepository.findById(id).orElse(null);
     }
 
     //utils
