@@ -7,8 +7,10 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
+import com.rsd.yaycha.entities.Comment;
 import com.rsd.yaycha.entities.Post;
 import com.rsd.yaycha.entities.User;
+import com.rsd.yaycha.services.CommentService;
 import com.rsd.yaycha.services.PostService;
 import com.rsd.yaycha.services.UserService;
 
@@ -20,6 +22,9 @@ public class GraphqlController {
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private CommentService commentService;
 
     //user
     @QueryMapping
@@ -41,6 +46,18 @@ public class GraphqlController {
     @QueryMapping
     public Post postWIthId(@Argument int id) {
         return postService.getPostById(id);
+    }
+
+    //comment
+
+    @QueryMapping
+    public List<Comment> comments() {
+        return commentService.getAllComments();
+    }
+
+    @QueryMapping
+    public Comment commentWithId(@Argument int id) {
+        return commentService.getCommentById(id);
     }
 
 }
