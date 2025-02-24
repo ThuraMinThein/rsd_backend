@@ -1,5 +1,7 @@
 package com.rsd.yaycha.dto;
 
+import java.sql.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class PostDTO {
 
     private String content;
-    private String createdAt;
+    private Date createdAt;
 
     private int userId;
 

@@ -28,7 +28,7 @@ public class GraphqlController {
 
     //user
     @QueryMapping
-    public List<User> getUsers() {
+    public List<User> users() {
         return userService.findAll();
     }
 

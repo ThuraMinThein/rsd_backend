@@ -39,6 +39,7 @@ public class PostService {
     public Post convertDtoToEntity(PostDTO postDTO, User user) {
         Post post = new Post();
         post.setContent(postDTO.getContent());
+        post.setCreatedAt(postDTO.getCreatedAt());
         post.setUser(user);
         return post;
     }

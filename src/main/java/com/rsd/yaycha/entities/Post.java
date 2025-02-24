@@ -3,6 +3,9 @@ package com.rsd.yaycha.entities;
 import java.sql.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,9 +31,11 @@ public class Post {
 
     @ManyToOne()
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonBackReference
     private User user;
 
     @OneToMany(mappedBy = "post")
+    @JsonManagedReference
     private List<Comment> comments;
 
 }
