@@ -30,4 +30,9 @@ public class UserController {
         return ResponseEntity.ok(loginUser);
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<String> logoutUser() {
+        return ResponseEntity.ok("User logged out successfully");
+    }
+
 }
