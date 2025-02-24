@@ -1,12 +1,10 @@
 package com.rsd.yaycha.utils;
 
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,17 +18,7 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-    private String SECRET_KEY = "";
-
-    private JwtService() {
-        try {
-            KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
-            SecretKey key = keyGenerator.generateKey();
-            SECRET_KEY = Base64.getEncoder().encodeToString(key.getEncoded());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private String SECRET_KEY = "50a8e7149c8ac219a62ef73cccd55fbafb84386b84438f2ae48d7eb2eebc84c9";
 
     public String generateToken(String userEmail) {
         Map<String, Object> claims = new HashMap<>();

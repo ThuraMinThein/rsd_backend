@@ -15,18 +15,32 @@ type User {
     comments: [Comment]
 }
 
+type UserSummary {
+    id: ID!
+    name: String!
+    userName: String!
+    bio: String
+}
+
 type Post {
     id: ID!
     content: String!
-    user: User!
+    user: UserSummary!
     comments: [Comment!]!
+    createdAt: String!
+}
+
+type PostSummary {
+    id: ID!
+    content: String!
+    user: UserSummary!
     createdAt: String!
 }
 
 type Comment {
     id: ID!
     content: String!
-    user: User!
-    post: Post!
+    user: UserSummary!
+    post: PostSummary!
     createdAt: String!
 }
