@@ -3,6 +3,7 @@ type Query {
     userWithId(id: ID!): User
     posts: [Post]
     postWithId(id: ID!): Post
+    postsWithUserId(userId: ID!): [Post]
     comments: [Comment]
 }
 

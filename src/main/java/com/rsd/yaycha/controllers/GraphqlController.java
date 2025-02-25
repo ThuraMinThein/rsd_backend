@@ -46,8 +46,13 @@ public class GraphqlController {
     }
 
     @QueryMapping
-    public Post postWIthId(@Argument int id) {
+    public Post postWithId(@Argument int id) {
         return postService.getPostById(id);
+    }
+
+    @QueryMapping
+    public List<Post> postsWithUserId(@Argument int userId) {
+        return postService.getPostByUserId(userId);
     }
 
     //comment
