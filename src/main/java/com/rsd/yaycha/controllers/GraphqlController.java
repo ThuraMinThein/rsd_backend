@@ -67,4 +67,9 @@ public class GraphqlController {
         return commentService.getCommentById(id);
     }
 
+    @QueryMapping
+    public List<Comment> commentsWithPostId(@Argument int postId) {
+        return commentService.getCommentsByPostId(postId);
+    }
+
 }

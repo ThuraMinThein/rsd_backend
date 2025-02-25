@@ -16,7 +16,7 @@ import com.rsd.yaycha.services.UserService;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins = "*")
+@CrossOrigin
 public class UserController {
 
     @Autowired

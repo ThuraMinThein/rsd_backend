@@ -16,7 +16,7 @@ import com.rsd.yaycha.services.PostService;
 
 @RestController
 @RequestMapping("/posts")
-@CrossOrigin(origins = "*")
+@CrossOrigin
 public class PostController {
 
     @Autowired

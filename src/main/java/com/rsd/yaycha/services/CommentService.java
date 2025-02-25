@@ -34,6 +34,12 @@ public class CommentService {
         return commentRepository.findAll();
     }
 
+    
+    public List<Comment> getCommentsByPostId(int postId) {
+        return commentRepository.findAllByPostId(postId);
+    }
+
+
     public Comment getCommentById(int id) {
         return commentRepository.findById(id).orElse(null);
     }

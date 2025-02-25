@@ -5,6 +5,7 @@ type Query {
     postWithId(id: ID!): Post
     postsWithUserId(userId: ID!): [Post]
     comments: [Comment]
+    commentsWithPostId(postId: ID!): [Comment]
 }
 
 type User {
