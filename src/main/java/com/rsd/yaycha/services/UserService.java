@@ -62,6 +62,17 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
+    
+    public UserDTO deleteUser(int id) {
+        User user = findOneById(id);
+        if(user == null) {
+            throw new RuntimeException("User not found");
+        }
+        userRepository.delete(user);
+        return convertEntityToDto(user);
+    }
+
+
     //utils
     private User convertDtoToEntity(UserDTO userDTO) {
         User user = new User();
@@ -72,14 +83,14 @@ public class UserService {
         return user;
     }
 
-    // private UserDTO convertEntityToDto(User user) {
-    //     UserDTO userDTO = new UserDTO();
-    //     userDTO.setId(user.getId());
-    //     userDTO.setName(user.getName());
-    //     userDTO.setUserName(user.getUserName());
-    //     userDTO.setPassword(user.getPassword());
-    //     return userDTO;
-    // }
+    private UserDTO convertEntityToDto(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setName(user.getName());
+        userDTO.setUserName(user.getUserName());
+        userDTO.setPassword(user.getPassword());
+        return userDTO;
+    }
 
     private UserWithTokenDto convertEntityToTokenDto(User user,  String accessToken) {
         UserWithTokenDto userWithTokenDTO = new UserWithTokenDto();

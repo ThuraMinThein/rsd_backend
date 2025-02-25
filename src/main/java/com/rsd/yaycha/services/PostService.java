@@ -36,12 +36,32 @@ public class PostService {
         return postRepository.findById(id).orElse(null);
     }
 
+    
+    public PostDTO deletePost(int id) {
+        Post post = getPostById(id);
+        if(post == null){
+            throw new RuntimeException("Post not found");
+        }
+        postRepository.delete(post);
+        return convertEntityToDto(post);
+    }
+
+
+    //utils
     public Post convertDtoToEntity(PostDTO postDTO, User user) {
         Post post = new Post();
         post.setContent(postDTO.getContent());
         post.setCreatedAt(postDTO.getCreatedAt());
         post.setUser(user);
         return post;
+    }
+
+    public PostDTO convertEntityToDto(Post post) {
+        PostDTO postDTO = new PostDTO();
+        postDTO.setContent(post.getContent());
+        postDTO.setCreatedAt(post.getCreatedAt());
+        postDTO.setUserId(post.getUser().getId());
+        return postDTO;
     }
 
 }

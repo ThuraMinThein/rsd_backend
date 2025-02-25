@@ -38,6 +38,17 @@ public class CommentService {
         return commentRepository.findById(id).orElse(null);
     }
 
+    
+    public CommentDTO deleteComment(int id) {
+        Comment comment = getCommentById(id);
+        if(comment == null) {
+            throw new RuntimeException("Comment not found");
+        }
+        commentRepository.delete(comment);
+        return convertEntityToDto(comment);
+    }
+
+    //utils
     public Comment convertDtoToEntity(CommentDTO commentDTO, User user, Post post) {
         Comment comment = new Comment();
         comment.setContent(commentDTO.getContent());
@@ -45,6 +56,15 @@ public class CommentService {
         comment.setUser(user);
         comment.setPost(post);
         return comment;
+    }
+
+    public CommentDTO convertEntityToDto(Comment comment) {
+        CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setContent(comment.getContent());
+        commentDTO.setCreatedAt(comment.getCreatedAt());
+        commentDTO.setUserId(comment.getUser().getId());
+        commentDTO.setPostId(comment.getPost().getId());
+        return commentDTO;
     }
 
 }
