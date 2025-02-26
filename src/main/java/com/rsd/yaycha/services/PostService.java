@@ -10,6 +10,8 @@ import com.rsd.yaycha.entities.Post;
 import com.rsd.yaycha.entities.User;
 import com.rsd.yaycha.repositories.PostRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class PostService {
 
@@ -39,14 +41,14 @@ public class PostService {
 
 
     public Post getPostById(int id) {
-        return postRepository.findById(id).orElse(null);
+        return postRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Post not found"));
     }
 
     
     public PostDTO deletePost(int id) {
         Post post = getPostById(id);
         if(post == null){
-            throw new RuntimeException("Post not found");
+            throw new EntityNotFoundException("Post not found");
         }
         postRepository.delete(post);
         return convertEntityToDto(post);

@@ -15,6 +15,8 @@ import com.rsd.yaycha.entities.User;
 import com.rsd.yaycha.repositories.UserRepository;
 import com.rsd.yaycha.utils.JwtService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class UserService {
 
@@ -59,14 +61,14 @@ public class UserService {
     }
 
     public User findOneById(int id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found with this id"));
     }
 
     
     public UserDTO deleteUser(int id) {
         User user = findOneById(id);
         if(user == null) {
-            throw new RuntimeException("User not found");
+            throw new EntityNotFoundException("User not found");
         }
         userRepository.delete(user);
         return convertEntityToDto(user);
