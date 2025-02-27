@@ -19,5 +19,17 @@ services:
       retries: 5
     restart: unless-stopped
 
+  yaycha-app:
+    build: .
+    container_name: yaycha-app
+    ports:
+      - "3333:3333"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    restart: unless-stopped
+
 volumes:
   postgres_data:
