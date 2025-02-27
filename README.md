@@ -1,4 +1,4 @@
-# eCommerce Backend
+# rsd (Rockstar) Backend
 
 ## Overview
 The `rsd_backend` is a Spring Boot-based REST API + GraphQL that powers a Social platform. It provides functionalities for user authentication, posting and commenting contents.
