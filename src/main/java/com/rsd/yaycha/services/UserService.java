@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.rsd.yaycha.dto.CreateUserDTO;
+import com.rsd.yaycha.dto.LoginDTO;
 import com.rsd.yaycha.dto.UserDTO;
 import com.rsd.yaycha.dto.UserWithTokenDto;
 import com.rsd.yaycha.entities.User;
@@ -31,7 +34,7 @@ public class UserService {
 
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
-    public UserWithTokenDto createUser(UserDTO userDTO) {
+    public UserWithTokenDto createUser(CreateUserDTO userDTO) {
 
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         User user = convertDtoToEntity(userDTO);
@@ -40,7 +43,7 @@ public class UserService {
         return convertEntityToTokenDto(user, accessToken);
     }
 
-    public UserWithTokenDto loginUser(UserDTO userDTO) {
+    public UserWithTokenDto loginUser(LoginDTO userDTO) {
         // authenticationManager.authenticate(
         //         new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
         //                 userDTO.getUserName(), userDTO.getPassword()));
@@ -64,6 +67,12 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found with this id"));
     }
 
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.findByUserName(username);
+        return user;
+    }
     
     public UserDTO deleteUser(int id) {
         User user = findOneById(id);
@@ -76,7 +85,7 @@ public class UserService {
 
 
     //utils
-    private User convertDtoToEntity(UserDTO userDTO) {
+    private User convertDtoToEntity(CreateUserDTO userDTO) {
         User user = new User();
         user.setId(userDTO.getId());
         user.setName(userDTO.getName());
@@ -92,7 +101,6 @@ public class UserService {
         userDTO.setName(user.getName());
         userDTO.setBio(user.getBio());
         userDTO.setUserName(user.getUserName());
-        userDTO.setPassword(user.getPassword());
         return userDTO;
     }
 

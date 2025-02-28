@@ -14,6 +14,4 @@ public class PostDTO {
     private String content;
     private Date createdAt;
 
-    private int userId;
-
 }

@@ -26,7 +26,7 @@ public class CommentService {
     private PostService postService;
 
     public Comment createComment(CommentDTO commentDTO) {
-        User user = userService.findOneById(commentDTO.getUserId());
+        User user = userService.getCurrentUser();
         Post post = postService.getPostById(commentDTO.getPostId());
         Comment comment = convertDtoToEntity(commentDTO, user, post);
         return commentRepository.save(comment);
@@ -70,7 +70,6 @@ public class CommentService {
         CommentDTO commentDTO = new CommentDTO();
         commentDTO.setContent(comment.getContent());
         commentDTO.setCreatedAt(comment.getCreatedAt());
-        commentDTO.setUserId(comment.getUser().getId());
         commentDTO.setPostId(comment.getPost().getId());
         return commentDTO;
     }

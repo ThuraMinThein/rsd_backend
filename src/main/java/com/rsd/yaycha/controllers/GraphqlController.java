@@ -39,6 +39,11 @@ public class GraphqlController {
         return userService.findOneById(id);
     }
 
+    @QueryMapping
+    public User currentUser(){
+        return userService.getCurrentUser();
+    }
+
     //post
     @QueryMapping
     public List<Post> posts() {

@@ -1,6 +1,7 @@
 type Query {
     users: [User]
     userWithId(id: ID!): User
+    currentUser: User
     posts: [Post]
     postWithId(id: ID!): Post
     postsWithUserId(userId: ID!): [Post]

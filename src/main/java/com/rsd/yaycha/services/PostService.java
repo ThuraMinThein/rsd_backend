@@ -22,7 +22,7 @@ public class PostService {
     private UserService userService;
 
     public Post createPost(PostDTO postDto) {
-        User user = userService.findOneById(postDto.getUserId());
+        User user = userService.getCurrentUser();
         if(user == null){
             throw new RuntimeException("User not found");
         }
@@ -68,7 +68,6 @@ public class PostService {
         PostDTO postDTO = new PostDTO();
         postDTO.setContent(post.getContent());
         postDTO.setCreatedAt(post.getCreatedAt());
-        postDTO.setUserId(post.getUser().getId());
         return postDTO;
     }
 

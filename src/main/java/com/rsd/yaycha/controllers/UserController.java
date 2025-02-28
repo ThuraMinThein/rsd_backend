@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rsd.yaycha.dto.CreateUserDTO;
+import com.rsd.yaycha.dto.LoginDTO;
 import com.rsd.yaycha.dto.UserDTO;
 import com.rsd.yaycha.dto.UserWithTokenDto;
 import com.rsd.yaycha.services.UserService;
@@ -23,13 +25,13 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserWithTokenDto> createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserWithTokenDto> createUser(@RequestBody CreateUserDTO userDTO) {
         UserWithTokenDto createdUser = userService.createUser(userDTO);
         return ResponseEntity.ok(createdUser);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserWithTokenDto> loginUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserWithTokenDto> loginUser(@RequestBody LoginDTO userDTO) {
         UserWithTokenDto loginUser = userService.loginUser(userDTO);
         return ResponseEntity.ok(loginUser);
     }
