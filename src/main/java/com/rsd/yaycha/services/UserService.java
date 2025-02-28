@@ -80,6 +80,7 @@ public class UserService {
         User user = new User();
         user.setId(userDTO.getId());
         user.setName(userDTO.getName());
+        user.setBio(userDTO.getBio());
         user.setUserName(userDTO.getUserName());
         user.setPassword(userDTO.getPassword());
         return user;
@@ -89,6 +90,7 @@ public class UserService {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
         userDTO.setName(user.getName());
+        userDTO.setBio(user.getBio());
         userDTO.setUserName(user.getUserName());
         userDTO.setPassword(user.getPassword());
         return userDTO;
