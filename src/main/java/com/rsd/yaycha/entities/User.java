@@ -47,4 +47,12 @@ public class User {
     @JsonManagedReference
     private List<CommentLike> commentLikes;
 
+    @OneToMany(mappedBy = "follower")
+    @JsonManagedReference
+    private List<Follow> follower;
+    
+    @OneToMany(mappedBy = "following")
+    @JsonManagedReference
+    private List<Follow> following;
+
 }
