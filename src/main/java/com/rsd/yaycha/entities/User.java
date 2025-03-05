@@ -39,4 +39,12 @@ public class User {
     @JsonManagedReference
     private List<Comment> comments;
 
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private List<PostLike> postLikes;
+
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private List<CommentLike> commentLikes;
+
 }

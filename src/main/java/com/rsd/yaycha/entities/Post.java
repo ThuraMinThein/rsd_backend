@@ -38,4 +38,8 @@ public class Post {
     @JsonManagedReference
     private List<Comment> comments;
 
+    @OneToMany(mappedBy = "post")
+    @JsonManagedReference
+    private List<PostLike> postLikes;
+
 }
