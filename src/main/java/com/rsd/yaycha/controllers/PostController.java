@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rsd.yaycha.dto.PostDTO;
 import com.rsd.yaycha.entities.Post;
+import com.rsd.yaycha.entities.PostLike;
 import com.rsd.yaycha.services.PostService;
 
 @RestController
@@ -27,6 +28,19 @@ public class PostController {
         Post newPost =  postService.createPost(postDto);
         return ResponseEntity.ok(newPost);
     }
+
+    @PostMapping("/like/{id}")
+    public ResponseEntity<PostLike> likePost(@PathVariable int id) {
+        PostLike likedPost = postService.likePost(id);
+        return ResponseEntity.ok(likedPost);
+    }
+
+    @DeleteMapping("/unlike/{id}")
+    public ResponseEntity<PostLike> unlikePost(@PathVariable int id) {
+        PostLike unlikePost = postService.unlikePost(id);
+        return ResponseEntity.ok(unlikePost);
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<PostDTO> deletePost(@PathVariable int id) {

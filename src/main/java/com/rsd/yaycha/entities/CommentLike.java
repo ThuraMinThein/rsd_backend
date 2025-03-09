@@ -27,7 +27,6 @@ public class CommentLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "comment_id")

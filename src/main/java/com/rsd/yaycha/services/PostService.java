@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.rsd.yaycha.dto.PostDTO;
 import com.rsd.yaycha.entities.Post;
+import com.rsd.yaycha.entities.PostLike;
 import com.rsd.yaycha.entities.User;
+import com.rsd.yaycha.repositories.PostLikesRepository;
 import com.rsd.yaycha.repositories.PostRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -19,6 +21,9 @@ public class PostService {
     private PostRepository postRepository;
 
     @Autowired
+    private PostLikesRepository postLikesRepository;
+
+    @Autowired
     private UserService userService;
 
     public Post createPost(PostDTO postDto) {
@@ -28,6 +33,34 @@ public class PostService {
         }
         Post post = convertDtoToEntity(postDto, user);
         return postRepository.save(post);
+    }
+
+    public PostLike likePost(int id) {
+        User user = userService.getCurrentUser();
+        if(user == null){
+            throw new RuntimeException("User not found");
+        }
+        Post post = getPostById(id);
+        PostLike postLike = new PostLike();
+        postLike.setPost(post);
+        postLike.setUser(user);
+        return  postLikesRepository.save(postLike);
+    }
+
+    public PostLike unlikePost(int id) {
+        User user = userService.getCurrentUser();
+        if(user == null){
+            throw new RuntimeException("User not found");
+        }
+        Post post = getPostById(id);
+
+        PostLike postLike = postLikesRepository.findByPostAndUser(post, user);
+        if(postLike == null){
+            throw new RuntimeException("Post like not found");
+        }
+        postLikesRepository.delete(postLike);
+        return postLike;
+        
     }
 
     public List<Post> getAllPosts(){
@@ -70,5 +103,6 @@ public class PostService {
         postDTO.setCreatedAt(post.getCreatedAt());
         return postDTO;
     }
+
 
 }

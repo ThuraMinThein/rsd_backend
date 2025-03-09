@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rsd.yaycha.dto.CommentDTO;
 import com.rsd.yaycha.entities.Comment;
+import com.rsd.yaycha.entities.CommentLike;
 import com.rsd.yaycha.services.CommentService;
 
 @RestController
@@ -25,6 +26,18 @@ public class CommentController {
     @PostMapping
     public Comment createComment(@RequestBody CommentDTO commentDTO) {
         return commentService.createComment(commentDTO);
+    }
+
+    @PostMapping("/like/{id}")
+    public ResponseEntity<CommentLike> likeComment(@PathVariable int id) {
+        CommentLike likedComment = commentService.likeComment(id);
+        return ResponseEntity.ok(likedComment);
+    }
+
+    @DeleteMapping("/unlike/{id}")
+    public ResponseEntity<CommentLike> unlikeComment(@PathVariable int id) {
+        CommentLike unlikeComment = commentService.unlikeComment(id);
+        return ResponseEntity.ok(unlikeComment);
     }
 
     @DeleteMapping("/{id}")

@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 
 import com.rsd.yaycha.dto.CommentDTO;
 import com.rsd.yaycha.entities.Comment;
+import com.rsd.yaycha.entities.CommentLike;
 import com.rsd.yaycha.entities.Post;
 import com.rsd.yaycha.entities.User;
+import com.rsd.yaycha.repositories.CommentLikesRepository;
 import com.rsd.yaycha.repositories.CommentRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -18,6 +20,9 @@ public class CommentService {
 
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    private CommentLikesRepository commentLikesRepository;
 
     @Autowired
     private UserService userService;
@@ -30,6 +35,38 @@ public class CommentService {
         Post post = postService.getPostById(commentDTO.getPostId());
         Comment comment = convertDtoToEntity(commentDTO, user, post);
         return commentRepository.save(comment);
+    }
+
+    public CommentLike likeComment(int id) {
+        User user = userService.getCurrentUser();
+        if(user == null) {
+            throw new EntityNotFoundException("User not found");
+        }
+        Comment comment = getCommentById(id);
+        if(comment == null) {
+            throw new EntityNotFoundException("Comment not found");
+        }
+        CommentLike commentLike = new CommentLike();
+        commentLike.setComment(comment);
+        commentLike.setUser(user);
+        return commentLikesRepository.save(commentLike);
+    }
+
+    public CommentLike unlikeComment(int id) {
+        User user = userService.getCurrentUser();
+        if(user == null) {
+            throw new EntityNotFoundException("User not found");
+        }
+        Comment comment = getCommentById(id);
+        if(comment == null) {
+            throw new EntityNotFoundException("Comment not found");
+        }
+        CommentLike commentLike = commentLikesRepository.findByCommentAndUser(comment, user);
+        if(commentLike == null) {
+            throw new EntityNotFoundException("Comment like not found");
+        }
+        commentLikesRepository.delete(commentLike);
+        return commentLike;
     }
 
     public List<Comment> getAllComments(){
