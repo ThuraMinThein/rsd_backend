@@ -31,6 +31,7 @@ type Post {
     user: UserSummary!
     comments: [Comment!]!
     createdAt: String!
+    totalLikes: Int
 }
 
 type PostSummary {
@@ -38,6 +39,7 @@ type PostSummary {
     content: String!
     user: UserSummary!
     createdAt: String!
+    totalLikes: Int
 }
 
 type Comment {
@@ -46,4 +48,5 @@ type Comment {
     user: UserSummary!
     post: PostSummary!
     createdAt: String!
+    totalLikes: Int
 }
