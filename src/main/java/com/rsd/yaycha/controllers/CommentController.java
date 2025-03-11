@@ -30,14 +30,8 @@ public class CommentController {
 
     @PostMapping("/like/{id}")
     public ResponseEntity<CommentLike> likeComment(@PathVariable int id) {
-        CommentLike likedComment = commentService.likeComment(id);
+        CommentLike likedComment = commentService.likeUnlikeComment(id);
         return ResponseEntity.ok(likedComment);
-    }
-
-    @DeleteMapping("/unlike/{id}")
-    public ResponseEntity<CommentLike> unlikeComment(@PathVariable int id) {
-        CommentLike unlikeComment = commentService.unlikeComment(id);
-        return ResponseEntity.ok(unlikeComment);
     }
 
     @DeleteMapping("/{id}")

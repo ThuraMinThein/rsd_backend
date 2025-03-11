@@ -1,12 +1,13 @@
 package com.rsd.yaycha.entities;
-
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,12 +30,12 @@ public class Comment {
 
     private Date createdAt;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonBackReference
     private User user;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     @JsonBackReference
     private Post post;
@@ -42,5 +43,8 @@ public class Comment {
     @OneToMany(mappedBy = "comment")
     @JsonManagedReference
     private List<CommentLike> commentLikes;
+
+    @Column(name = "total_likes", nullable = true)
+    private Integer totalLikes;
 
 }

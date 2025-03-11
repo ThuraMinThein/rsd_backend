@@ -31,16 +31,9 @@ public class PostController {
 
     @PostMapping("/like/{id}")
     public ResponseEntity<PostLike> likePost(@PathVariable int id) {
-        PostLike likedPost = postService.likePost(id);
+        PostLike likedPost = postService.likeUnlikePost(id);
         return ResponseEntity.ok(likedPost);
     }
-
-    @DeleteMapping("/unlike/{id}")
-    public ResponseEntity<PostLike> unlikePost(@PathVariable int id) {
-        PostLike unlikePost = postService.unlikePost(id);
-        return ResponseEntity.ok(unlikePost);
-    }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<PostDTO> deletePost(@PathVariable int id) {

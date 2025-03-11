@@ -37,22 +37,7 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public CommentLike likeComment(int id) {
-        User user = userService.getCurrentUser();
-        if(user == null) {
-            throw new EntityNotFoundException("User not found");
-        }
-        Comment comment = getCommentById(id);
-        if(comment == null) {
-            throw new EntityNotFoundException("Comment not found");
-        }
-        CommentLike commentLike = new CommentLike();
-        commentLike.setComment(comment);
-        commentLike.setUser(user);
-        return commentLikesRepository.save(commentLike);
-    }
-
-    public CommentLike unlikeComment(int id) {
+    public CommentLike likeUnlikeComment(int id) {
         User user = userService.getCurrentUser();
         if(user == null) {
             throw new EntityNotFoundException("User not found");
@@ -63,10 +48,32 @@ public class CommentService {
         }
         CommentLike commentLike = commentLikesRepository.findByCommentAndUser(comment, user);
         if(commentLike == null) {
-            throw new EntityNotFoundException("Comment like not found");
+            
+        CommentLike newCommentLike = new CommentLike();
+        newCommentLike.setComment(comment);
+        newCommentLike.setUser(user);
+        CommentLike result = commentLikesRepository.save(newCommentLike);
+        increaseCommentLike(id);
+        return result;
         }
         commentLikesRepository.delete(commentLike);
+        decreaseCommentLike(id);
         return commentLike;
+    }
+
+    
+    private void increaseCommentLike(int id) {
+        Comment comment = getCommentById(id);
+        int totalLikes = comment.getTotalLikes() > 0 ? comment.getTotalLikes() + 1 : 1;
+        comment.setTotalLikes(totalLikes);
+        commentRepository.save(comment);
+    }
+
+    private void decreaseCommentLike(int id) {
+        Comment comment = getCommentById(id);
+        int totalLikes = comment.getTotalLikes() > 0 ? comment.getTotalLikes() - 1 : 0;
+        comment.setTotalLikes(totalLikes);
+        commentRepository.save(comment);
     }
 
     public List<Comment> getAllComments(){

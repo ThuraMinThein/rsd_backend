@@ -75,7 +75,6 @@ public class UserService {
         return convertEntityToTokenDto(user, accessToken);
     }
 
-    
     public List<User> findAll() {
         return userRepository.findAll();
     }
@@ -89,6 +88,17 @@ public class UserService {
         String username = authentication.getName();
         User user = userRepository.findByUserName(username);
         return user;
+    }
+
+    
+    public List<User> getUserFollowers() {
+        List<User> followers = followRepository.findFollowerByFollowingId(getCurrentUser().getId());
+        return followers;
+    }
+
+    public List<User> getUserFollowings() {
+        List<User> followings = followRepository.findFollowingByFollowerId(getCurrentUser().getId());
+        return followings;
     }
     
     public UserDTO deleteUser(int id) {

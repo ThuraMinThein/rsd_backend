@@ -7,6 +7,10 @@ type Query {
     postsWithUserId(userId: ID!): [Post]
     comments: [Comment]
     commentsWithPostId(postId: ID!): [Comment]
+    postLikes(postId: ID!): [PostLike]
+    commentLikes(commentId: ID!): [CommentLike]
+    follower: [UserSummary]
+    following: [UserSummary]
 }
 
 type User {
@@ -16,12 +20,14 @@ type User {
     bio: String
     posts: [Post]
     comments: [Comment]
+    postLikes: [PostLike]
+    commentLikes: [CommentLike]
 }
 
 type UserSummary {
-    id: ID!
-    name: String!
-    userName: String!
+    id: ID
+    name: String
+    userName: String
     bio: String
 }
 
@@ -42,6 +48,12 @@ type PostSummary {
     totalLikes: Int
 }
 
+type PostLike {
+    id: ID!
+    user: UserSummary
+    post: PostSummary
+}
+
 type Comment {
     id: ID!
     content: String!
@@ -49,4 +61,10 @@ type Comment {
     post: PostSummary!
     createdAt: String!
     totalLikes: Int
+}
+
+type CommentLike {
+    id: ID!
+    user: UserSummary
+    comment: Comment
 }

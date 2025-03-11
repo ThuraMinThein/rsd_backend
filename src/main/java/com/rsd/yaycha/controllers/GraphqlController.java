@@ -44,6 +44,16 @@ public class GraphqlController {
         return userService.getCurrentUser();
     }
 
+    @QueryMapping
+    public List<User> follower(){
+        return userService.getUserFollowers();
+    }
+
+    @QueryMapping
+    public List<User> following(){
+        return userService.getUserFollowings();
+    }
+
     //post
     @QueryMapping
     public List<Post> posts() {

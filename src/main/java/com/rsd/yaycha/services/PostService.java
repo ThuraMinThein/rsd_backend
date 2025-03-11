@@ -1,5 +1,6 @@
 package com.rsd.yaycha.services;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,32 +36,43 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public PostLike likePost(int id) {
+    public PostLike likeUnlikePost(int id) {
         User user = userService.getCurrentUser();
         if(user == null){
             throw new RuntimeException("User not found");
         }
         Post post = getPostById(id);
-        PostLike postLike = new PostLike();
-        postLike.setPost(post);
-        postLike.setUser(user);
-        return  postLikesRepository.save(postLike);
-    }
-
-    public PostLike unlikePost(int id) {
-        User user = userService.getCurrentUser();
-        if(user == null){
-            throw new RuntimeException("User not found");
+        if(post == null){
+            throw new EntityNotFoundException("Post not found");
         }
-        Post post = getPostById(id);
-
         PostLike postLike = postLikesRepository.findByPostAndUser(post, user);
         if(postLike == null){
-            throw new RuntimeException("Post like not found");
+            PostLike newPostLike = new PostLike();
+            newPostLike.setPost(post);
+            newPostLike.setUser(user);
+            newPostLike.setCreatedAt(new Date());
+            PostLike result = postLikesRepository.save(newPostLike);
+            increasePostLike(id);
+            return result;
+        }else {
+            postLikesRepository.delete(postLike);
+            decreasePostLike(id);
+            return postLike;
         }
-        postLikesRepository.delete(postLike);
-        return postLike;
-        
+    }
+
+    private void increasePostLike(int id) {
+        Post post = getPostById(id);
+        int totalLikes = post.getTotalLikes() > 0 ? post.getTotalLikes() + 1 : 1;
+        post.setTotalLikes(totalLikes);
+        postRepository.save(post);
+    }
+
+    private void decreasePostLike(int id) {
+        Post post = getPostById(id);
+        int totalLikes = post.getTotalLikes() > 0 ? post.getTotalLikes() - 1 : 0;
+        post.setTotalLikes(totalLikes);
+        postRepository.save(post);
     }
 
     public List<Post> getAllPosts(){
@@ -86,7 +98,6 @@ public class PostService {
         postRepository.delete(post);
         return convertEntityToDto(post);
     }
-
 
     //utils
     public Post convertDtoToEntity(PostDTO postDTO, User user) {

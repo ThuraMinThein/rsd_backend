@@ -13,12 +13,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "follows")
+@Table(
+    name = "follows", 
+    uniqueConstraints = @UniqueConstraint(columnNames = { "follower_id", "following_id" }))
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
