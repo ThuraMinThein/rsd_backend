@@ -30,6 +30,12 @@ public class UserController {
         return ResponseEntity.ok(createdUser);
     }
 
+    @PostMapping("/follow/{id}")
+    public ResponseEntity<UserDTO> followUser(@PathVariable int id) {
+        UserDTO createdUser = userService.followUser(id);
+        return ResponseEntity.ok(createdUser);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<UserWithTokenDto> loginUser(@RequestBody LoginDTO userDTO) {
         UserWithTokenDto loginUser = userService.loginUser(userDTO);

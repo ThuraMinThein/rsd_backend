@@ -1,6 +1,6 @@
 package com.rsd.yaycha.entities;
 
-import java.sql.Date;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 

@@ -1,5 +1,6 @@
 package com.rsd.yaycha.services;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,9 @@ import com.rsd.yaycha.dto.CreateUserDTO;
 import com.rsd.yaycha.dto.LoginDTO;
 import com.rsd.yaycha.dto.UserDTO;
 import com.rsd.yaycha.dto.UserWithTokenDto;
+import com.rsd.yaycha.entities.Follow;
 import com.rsd.yaycha.entities.User;
+import com.rsd.yaycha.repositories.FollowRepository;
 import com.rsd.yaycha.repositories.UserRepository;
 import com.rsd.yaycha.utils.JwtService;
 
@@ -25,6 +28,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private FollowRepository followRepository;
 
     @Autowired
     private JwtService jwtService;
@@ -41,6 +47,17 @@ public class UserService {
         user = userRepository.save(user);
         String accessToken = jwtService.generateToken(user.getUserName());
         return convertEntityToTokenDto(user, accessToken);
+    }
+    
+    public UserDTO followUser(int id) {
+        User user = findOneById(id);
+        User currentUser = getCurrentUser();
+        Follow follow = new Follow();
+        follow.setFollower(currentUser);
+        follow.setFollowing(user);
+        follow.setCreatedAt(new Date());
+        followRepository.save(follow);
+        return convertEntityToDto(user);
     }
 
     public UserWithTokenDto loginUser(LoginDTO userDTO) {
