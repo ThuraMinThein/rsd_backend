@@ -44,7 +44,7 @@ public class Comment {
     @JsonManagedReference
     private List<CommentLike> commentLikes;
 
-    @Column(name = "total_likes", nullable = true)
-    private Integer totalLikes;
+    @Column(name = "total_likes")
+    private Integer totalLikes = 0;
 
 }
