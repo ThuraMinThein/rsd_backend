@@ -9,7 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.rsd.yaycha.entities.Comment;
+import com.rsd.yaycha.entities.CommentLike;
 import com.rsd.yaycha.entities.Post;
+import com.rsd.yaycha.entities.PostLike;
 import com.rsd.yaycha.entities.User;
 import com.rsd.yaycha.services.CommentService;
 import com.rsd.yaycha.services.PostService;
@@ -70,6 +72,11 @@ public class GraphqlController {
         return postService.getPostByUserId(userId);
     }
 
+    @QueryMapping
+    public List<PostLike> postLikes(@Argument int postId) {
+        return postService.getAllPostLikes(postId);
+    }
+
     //comment
 
     @QueryMapping
@@ -85,6 +92,11 @@ public class GraphqlController {
     @QueryMapping
     public List<Comment> commentsWithPostId(@Argument int postId) {
         return commentService.getCommentsByPostId(postId);
+    }
+
+    @QueryMapping
+    public List<CommentLike> commentLikes(@Argument int commentId) {
+        return commentService.getAllCommentLikes(commentId);
     }
 
 }

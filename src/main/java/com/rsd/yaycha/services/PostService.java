@@ -84,6 +84,10 @@ public class PostService {
         return postRepository.findAllByUserId(userId);
     }
 
+    
+    public List<PostLike> getAllPostLikes(int postId) {
+        return postLikesRepository.findPostLikesByPostId(postId);
+    }
 
     public Post getPostById(int id) {
         return postRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Post not found"));
@@ -114,6 +118,5 @@ public class PostService {
         postDTO.setCreatedAt(post.getCreatedAt());
         return postDTO;
     }
-
 
 }

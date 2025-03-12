@@ -85,6 +85,10 @@ public class CommentService {
         return commentRepository.findAllByPostId(postId);
     }
 
+    
+    public List<CommentLike> getAllCommentLikes(int commentId) {
+        return commentLikesRepository.findCommentLikesByCommentId(commentId);
+    }
 
     public Comment getCommentById(int id) {
         return commentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Comment not found with this id"));
