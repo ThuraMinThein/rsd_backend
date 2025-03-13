@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,27 +32,27 @@ public class User {
 
     private String bio;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<Post> posts;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<PostLike> postLikes;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<CommentLike> commentLikes;
 
-    @OneToMany(mappedBy = "follower")
+    @OneToMany(mappedBy = "follower",cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<Follow> follower;
     
-    @OneToMany(mappedBy = "following")
+    @OneToMany(mappedBy = "following", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<Follow> following;
 

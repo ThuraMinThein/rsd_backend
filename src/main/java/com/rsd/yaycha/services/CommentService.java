@@ -14,6 +14,7 @@ import com.rsd.yaycha.repositories.CommentLikesRepository;
 import com.rsd.yaycha.repositories.CommentRepository;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 
 @Service
 public class CommentService {
@@ -94,11 +95,15 @@ public class CommentService {
         return commentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Comment not found with this id"));
     }
 
-    
+    @Transactional
     public CommentDTO deleteComment(int id) {
+        User user = userService.getCurrentUser();
         Comment comment = getCommentById(id);
         if(comment == null) {
             throw new EntityNotFoundException("Comment not found");
+        }
+        if(user.getId() != comment.getUser().getId()) {
+            throw new RuntimeException("You are not authorized to delete this post");
         }
         commentRepository.delete(comment);
         return convertEntityToDto(comment);

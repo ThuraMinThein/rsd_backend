@@ -14,6 +14,7 @@ import com.rsd.yaycha.repositories.PostLikesRepository;
 import com.rsd.yaycha.repositories.PostRepository;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 
 @Service
 public class PostService {
@@ -93,11 +94,16 @@ public class PostService {
         return postRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Post not found"));
     }
 
-    
+    @Transactional
     public PostDTO deletePost(int id) {
+        
+        User user = userService.getCurrentUser();
         Post post = getPostById(id);
         if(post == null){
             throw new EntityNotFoundException("Post not found");
+        }
+        if(user.getId() != post.getUser().getId()) {
+            throw new RuntimeException("You are not authorized to delete this post");
         }
         postRepository.delete(post);
         return convertEntityToDto(post);
