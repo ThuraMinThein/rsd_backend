@@ -2,6 +2,7 @@ package com.rsd.yaycha.services;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,15 +14,19 @@ import org.springframework.stereotype.Service;
 
 import com.rsd.yaycha.dto.CreateUserDTO;
 import com.rsd.yaycha.dto.LoginDTO;
+import com.rsd.yaycha.dto.RefreshTokenRequest;
 import com.rsd.yaycha.dto.UserDTO;
 import com.rsd.yaycha.dto.UserWithTokenDto;
 import com.rsd.yaycha.entities.Follow;
+import com.rsd.yaycha.entities.RefreshToken;
 import com.rsd.yaycha.entities.User;
 import com.rsd.yaycha.repositories.FollowRepository;
+import com.rsd.yaycha.repositories.RefreshTokenRepository;
 import com.rsd.yaycha.repositories.UserRepository;
 import com.rsd.yaycha.utils.JwtService;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class UserService {
@@ -40,13 +45,26 @@ public class UserService {
 
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
-    public UserWithTokenDto createUser(CreateUserDTO userDTO) {
+    @Autowired
+    private RefreshTokenRepository refreshTokenRepository;
 
+    private String createRefreshToken(User user) {
+        String generatedRefreshToken = jwtService.generateRefreshToken(user.getUserName());
+        RefreshToken refreshToken = new RefreshToken();
+        refreshToken.setToken(generatedRefreshToken);
+        refreshToken.setUser(user);
+        refreshToken.setExpiryDate(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24));
+        refreshTokenRepository.save(refreshToken);
+        return generatedRefreshToken;
+    }
+
+    public UserWithTokenDto createUser(CreateUserDTO userDTO) {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         User user = convertDtoToEntity(userDTO);
         user = userRepository.save(user);
         String accessToken = jwtService.generateToken(user.getUserName());
-        return convertEntityToTokenDto(user, accessToken);
+        String refreshToken = createRefreshToken(user);
+        return convertEntityToTokenDto(user, accessToken, refreshToken);
     }
     
     public UserDTO followUser(int id) {
@@ -72,7 +90,38 @@ public class UserService {
             
         User user = userRepository.findByUserName(userDTO.getUserName());
         String accessToken = jwtService.generateToken(user.getUserName());
-        return convertEntityToTokenDto(user, accessToken);
+        String refreshToken = createRefreshToken(user);
+        return convertEntityToTokenDto(user, accessToken, refreshToken);
+    }
+
+    
+    public UserWithTokenDto refreshToken(RefreshTokenRequest refreshTokenRequest) {
+        String refreshToken = refreshTokenRequest.getRefreshToken();
+        Optional<RefreshToken> refreshTokenFromDb = refreshTokenRepository.findByToken(refreshToken);
+
+        if(refreshTokenFromDb.isEmpty() || refreshTokenFromDb.get().getExpiryDate().before(new Date()) || refreshTokenFromDb.get().isRevoked()) {
+            throw new RuntimeException("Invalid refresh token");
+        }
+
+        RefreshToken validRefreshToken = refreshTokenFromDb.get();
+        User user = validRefreshToken.getUser();
+
+        User currentUser = getCurrentUser();
+        String newJwt = jwtService.generateToken(currentUser.getUserName());
+        String newRefreshToken = createRefreshToken(user);
+        return convertEntityToTokenDto(user, newJwt, newRefreshToken);
+    }
+
+    public String logoutUser(HttpServletRequest httpServletRequest) {
+        User currentUser = getCurrentUser();
+
+        List<RefreshToken> refreshTokens = refreshTokenRepository.findByUser_UserName(currentUser.getUserName());
+
+        for(RefreshToken refreshToken : refreshTokens) {
+            refreshToken.setRevoked(true);
+        }
+        refreshTokenRepository.saveAll(refreshTokens);
+        return "Logged out successfully";
     }
 
     public List<User> findAll() {
@@ -131,12 +180,13 @@ public class UserService {
         return userDTO;
     }
 
-    private UserWithTokenDto convertEntityToTokenDto(User user,  String accessToken) {
+    private UserWithTokenDto convertEntityToTokenDto(User user,  String accessToken, String refreshToken) {
         UserWithTokenDto userWithTokenDTO = new UserWithTokenDto();
         userWithTokenDTO.setId(user.getId());
         userWithTokenDTO.setName(user.getName());
         userWithTokenDTO.setUserName(user.getUserName());
         userWithTokenDTO.setAccessToken(accessToken);
+        userWithTokenDTO.setRefreshToken(refreshToken);
         return userWithTokenDTO;
     }
 

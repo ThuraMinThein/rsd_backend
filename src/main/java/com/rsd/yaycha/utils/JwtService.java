@@ -20,16 +20,26 @@ public class JwtService {
 
     private String SECRET_KEY = "50a8e7149c8ac219a62ef73cccd55fbafb84386b84438f2ae48d7eb2eebc84c9";
 
-    public String generateToken(String userEmail) {
+    public String generateToken(String userName) {
         Map<String, Object> claims = new HashMap<>();
 
         return Jwts.builder()
                 .claims()
                 .add(claims)
-                .subject(userEmail)
+                .subject(userName)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 *  60 * 60 * 24 * 7))
                 .and()
+                .signWith(getKey())
+                .compact();
+    }
+
+    public String generateRefreshToken(String userName) {
+
+        return Jwts.builder()
+                .subject(userName)
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + 1000 *  60 * 60 * 24))
                 .signWith(getKey())
                 .compact();
     }
@@ -67,6 +77,10 @@ public class JwtService {
 
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    public long getRefreshExpiration() {
+        return 1000 * 60 * 60 * 24;
     }
 
 }

@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rsd.yaycha.dto.CreateUserDTO;
 import com.rsd.yaycha.dto.LoginDTO;
+import com.rsd.yaycha.dto.RefreshTokenRequest;
 import com.rsd.yaycha.dto.UserDTO;
 import com.rsd.yaycha.dto.UserWithTokenDto;
 import com.rsd.yaycha.services.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/users")
@@ -42,9 +45,17 @@ public class UserController {
         return ResponseEntity.ok(loginUser);
     }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<UserWithTokenDto> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        UserWithTokenDto loginUser = userService.refreshToken(refreshTokenRequest);
+        return ResponseEntity.ok(loginUser);
+    }
+
+
     @PostMapping("/logout")
-    public ResponseEntity<String> logoutUser() {
-        return ResponseEntity.ok("User logged out successfully");
+    public ResponseEntity<String> logoutUser(HttpServletRequest httpServletRequest) {
+        String message = userService.logoutUser(httpServletRequest);
+        return ResponseEntity.ok(message);
     }
 
     @DeleteMapping("/{id}")
