@@ -79,10 +79,6 @@ public class UserService {
     }
 
     public UserWithTokenDto loginUser(LoginDTO userDTO) {
-        // authenticationManager.authenticate(
-        //         new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
-        //                 userDTO.getUserName(), userDTO.getPassword()));
-
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDTO.getUserName(), userDTO.getPassword()));
 
         if(!authentication.isAuthenticated())
