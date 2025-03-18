@@ -44,8 +44,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                     .requestMatchers(HttpMethod.POST, "users", "users/login")
                     .permitAll()
-                    // .requestMatchers("ws/**")
-                    // .permitAll()
+                    .requestMatchers("ws/**")
+                    .permitAll()
                     .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception
                 .accessDeniedHandler((request, response, accessDeniedException) -> {
