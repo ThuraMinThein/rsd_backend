@@ -42,8 +42,10 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
-                    .requestMatchers(HttpMethod.POST, "users", "users/login", "ws/**")
+                    .requestMatchers(HttpMethod.POST, "users", "users/login")
                     .permitAll()
+                    // .requestMatchers("ws/**")
+                    // .permitAll()
                     .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception
                 .accessDeniedHandler((request, response, accessDeniedException) -> {
